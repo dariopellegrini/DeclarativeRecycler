@@ -123,17 +123,15 @@ class UserRow(val message: String, val clicked: () -> Unit, val longClicked: (In
 }
 
 // Than can be added to the recyclerManager
-recyclerManager.push(
-                        ResponseRow(
-                                message = speech,
-                                onClick = {
-                                // On click show a Toast
-                                    Toast.makeText(this, speech, Toast.LENGTH_LONG).show()
-                                },
-                                onLongClick = { position ->
-                                // On long click remove the row
-                                    recyclerManager.remove(position, true, false)
-                                }), animated = true, scroll = true)
+recyclerManager.push(UserRow(
+                             message = message,
+                             clicked = {
+                                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                             },
+                             longClicked = { position ->
+                                 recyclerManager.remove(position, true, false)
+                             })
+                        , true, true)
 ```
 
 ## BasicRow subclassing
