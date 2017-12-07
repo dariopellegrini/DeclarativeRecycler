@@ -4,9 +4,13 @@
 
 A declarative way to use recycler views.
 
+## Example
+
+Download or clone the repo and try the demo app.
+
 ## Installation
 
-Add edit your build.gradle file
+Edit your build.gradle file
 ``` groovy
 allprojects {
     repositories {
@@ -15,7 +19,7 @@ allprojects {
     }
 }
 ```
-Then add as dependency to yout app/build.gradle
+Then add as dependency to your app/build.gradle
 ``` groovy
 dependencies {
     ...
@@ -25,9 +29,9 @@ dependencies {
 
 ## Usage
 
-With this library you can pupulate your recycler view in a very declarative way, adding or removing rows and configuring action.
+With this library you can populate your recycler view in a very declarative way, adding or removing rows and configuring action.
 
-First of all define a RecyclerManager
+First of all instantiate a RecyclerManager
 
 ``` kotlin
 recyclerManager = RecyclerManager(recyclerView, layoutManager)
@@ -55,10 +59,10 @@ recyclerManager.push(BasicRow(
                         onLongClick = { // Closure executed on row long click
                             itemView, position ->
                             recyclerManager.remove(position, true, false)
-                        }), animated = true, scroll = true)
+                        }), animated = true, scroll = true) // Animations
 ```
 
-Each row needs at least a layout resource id. Configuration onCLick and onLongClick closures are optional.
+Each row needs at least a layout resource id. Configuration onClick and onLongClick closures are optional.
 In order to add rows to recycler manager the following methods are available:
 - push;
 - append;
@@ -71,21 +75,23 @@ In order to remove rows to recycler manager the following methods are available:
 - remove at position;
 - clear.
 
-After any modification to rows list it is necessary to call
+After any modification to the rows list it is necessary to call
 ``` kotlin
 recyclerManager.reload()
 ```
 
 ## Animations
-For each modification method 2 flag are available:
+For each modification method, 2 flag are available:
 - animation: if true the modification comes with an animation (default to false);
 - scroll: if true and if animation is true, after the rows modification the recycler view will scroll to that added or removed row position (default to false).
 
-If animation is true it's not necessary to call reload method.
+If animation is true it's not necessary to call the reload method.
 
 ## Row implementation
-Above example uses BasicRow class to configure a row. It implements Row interface which can off course be implemented by a custom class.
+Above example uses BasicRow class to configure a row. It comes with the library and implements Row interface, which can of course be implemented by a custom class.
+
 ``` kotlin
+// UserRow implements Row interface and must conform to it.
 class UserRow(val message: String, val clicked: () -> Unit, val longClicked: (Int) -> Unit): Row {
 
     // Mandatory
@@ -129,3 +135,37 @@ recyclerManager.push(
                                     recyclerManager.remove(position, true, false)
                                 }), animated = true, scroll = true)
 ```
+
+## BasicRow subclassing
+An alternative to Row interface implementation is a BasicRow subclass
+
+``` kotlin
+// ResponseRow inherits from BasicRow, which implements Row.
+// Because ResponseRow inherits from BasicRow, all its attributes must be passed to BasicRow contructor.
+class ResponseRow(val message: String, onClick: () -> Unit, onLongClick: (Int) -> Unit):
+        BasicRow(
+                layoutID = R.layout.layout_card_cell_left,
+                configuration = {
+                    itemView, position ->
+                    itemView.leftMessageTextView.text = message
+                    itemView.leftDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
+                },
+                onClick = {
+                    _, _ ->
+                    onClick()
+                },
+                onLongClick = {
+                    _, position ->
+                    onLongClick(position)
+                }
+        )
+```
+
+## TODO
+
+- Group modifications.
+- Tests.
+
+## Author
+
+Dario Pellegrini, pellegrini.dario.1303@gmail.com
