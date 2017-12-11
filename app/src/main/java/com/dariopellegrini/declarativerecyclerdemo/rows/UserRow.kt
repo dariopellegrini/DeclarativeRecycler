@@ -1,5 +1,6 @@
 package com.dariopellegrini.declarativerecyclerdemo.rows
 
+import android.graphics.Color
 import android.text.format.DateFormat
 import android.view.View
 import com.dariopellegrini.declarativerecycler.Row
@@ -20,6 +21,8 @@ class UserRow(val message: String, val clicked: () -> Unit, val longClicked: (In
             itemView, _ ->
             itemView.rightMessageTextView.text = message
             itemView.rightDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
+
+            itemView.setBackgroundColor( if (selected) Color.parseColor("#FF4081") else Color.TRANSPARENT)
         }
 
     // Optional
@@ -32,8 +35,11 @@ class UserRow(val message: String, val clicked: () -> Unit, val longClicked: (In
     // Optional
     override val onLongClick: ((View, Int) -> Unit)?
         get() = {
-            _, position ->
-            longClicked(position)
+            itemView, position ->
+            selected = !selected
+            configuration?.invoke(itemView, position)
+//            longClicked(position)
         }
 
+    var selected: Boolean = false
 }

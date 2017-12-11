@@ -1,10 +1,11 @@
 package com.dariopellegrini.declarativerecycler
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 
 class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) {
     val rows = mutableListOf<Row>()
-    val adapter: RecyclerManagerAdapter
+    private val adapter: RecyclerManagerAdapter
 
     init {
         adapter = RecyclerManagerAdapter(rows)
@@ -29,6 +30,25 @@ class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerVie
 
     fun append(row: Row, animated: Boolean = false, scroll: Boolean = false) {
         add(row, rowsSize, animated, scroll)
+    }
+
+    // Add lists
+    fun add(rowsList: List<Row>, position: Int, animated: Boolean = false, scroll: Boolean = false) {
+        rows.addAll(position, rowsList)
+        if (animated) {
+            adapter.notifyItemRangeInserted(position, position + rowsList.size)
+            if (scroll) {
+                recyclerView.scrollToPosition(position)
+            }
+        }
+    }
+
+    fun push(rowsList: List<Row>, animated: Boolean = false, scroll: Boolean = false) {
+        add(rowsList, 0, animated, scroll)
+    }
+
+    fun append(rowsList: List<Row>, animated: Boolean = false, scroll: Boolean = false) {
+        add(rowsList, rowsSize, animated, scroll)
     }
 
     // Remove
@@ -66,6 +86,61 @@ class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerVie
     fun removeLast(animated: Boolean = false, scroll: Boolean = false) {
         if (lastPosition > -1) {
             remove(lastPosition, animated, scroll)
+        }
+    }
+
+
+    // Remove list
+
+    fun remove(closure: (Row) -> Boolean, animated: Boolean = false, scroll: Boolean = false) {
+        if (animated) {
+            var scrollPosition = -1
+            rows.removeAll {
+                row ->
+                if (closure(row)) {
+                    adapter.notifyItemRemoved(rows.indexOf(row))
+                    if (scroll && scrollPosition == -1) {
+                        scrollPosition = 0
+                        recyclerView.scrollToPosition(scrollPosition)
+                    }
+                }
+                closure(row)
+            }
+        } else {
+            rows.removeAll(closure)
+        }
+    }
+
+    fun remove(rowsList: List<Row>, animated: Boolean = false, scroll: Boolean = false) {
+        if (animated) {
+            var scrollPosition = -1
+            rowsList.forEach {
+                row ->
+                if (animated) {
+                    adapter.notifyItemRemoved(rows.indexOf(row))
+                    if (scroll && scrollPosition == -1) {
+                        scrollPosition = rows.indexOf(row)
+                        recyclerView.scrollToPosition(scrollPosition)
+                    }
+                }
+                rows.remove(row)
+            }
+        } else {
+            rows.removeAll(rowsList)
+        }
+    }
+
+    fun remove(from: Int, to: Int, animated: Boolean = false, scroll: Boolean = false) {
+        if (rows.size > from && rows.size > to) {
+            rows.subList(from, to).clear() // from is inclusive and to is exclusive
+            if (animated) {
+                adapter.notifyItemRangeRemoved(from, to - from)
+                if (scroll) {
+                    recyclerView.scrollToPosition(from)
+                }
+            }
+        } else {
+            Log.e("DeclarativeRecycler", "Check range size and row size. Out of bounds")
         }
     }
 

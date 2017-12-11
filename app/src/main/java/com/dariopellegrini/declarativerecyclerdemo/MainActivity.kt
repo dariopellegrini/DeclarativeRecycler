@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.format.DateFormat
+import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import com.dariopellegrini.declarativerecycler.BasicRow
@@ -14,6 +15,8 @@ import com.dariopellegrini.declarativerecyclerdemo.rows.UserRow
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_card_cell_left.view.*
 import java.util.*
+import android.view.MenuItem
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,14 +40,14 @@ class MainActivity : AppCompatActivity() {
 
                 // Pushing a row with a right aligned message (for user message).
                 recyclerManager.push(
-                        UserRow(
+                        listOf(UserRow(
                                 message = message,
                                 clicked = {
                                     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
                                 },
                                 longClicked = { position ->
                                     recyclerManager.remove(position, true, false)
-                                })
+                                }))
                         , true, true)
 
                 randomResponse()
@@ -55,6 +58,22 @@ class MainActivity : AppCompatActivity() {
         addWelcomeMessage()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_delete, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_delete) {
+            recyclerManager.remove({
+                row ->
+                (row is UserRow) && (row.selected)
+            }, true, false)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     fun addWelcomeMessage() {
         Thread {
             Thread.sleep(1000)
@@ -62,21 +81,23 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 val message = "Write whatever you want. I'll write whatever I want."
                 // Adding a basic row
-                recyclerManager.push(BasicRow(
-                        layoutID = R.layout.layout_card_cell_left,
-                        configuration = {
-                            itemView, position ->
-                            itemView.leftMessageTextView.text = message
-                            itemView.leftDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
-                        },
-                        onClick = {
-                            itemView, position ->
-                            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-                        },
-                        onLongClick = {
-                            itemView, position ->
-                            recyclerManager.remove(position, true, false)
-                        }), true, true)
+                recyclerManager.push(
+                        BasicRow(
+                                layoutID = R.layout.layout_card_cell_left,
+                                configuration = {
+                                    itemView, position ->
+                                    itemView.leftMessageTextView.text = message
+                                    itemView.leftDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
+                                },
+                                onClick = {
+                                    itemView, position ->
+                                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                                },
+                                onLongClick = {
+                                    itemView, position ->
+                                    recyclerManager.remove(position, true, false)
+                                }
+                        ), animated = true, scroll = true)
             }
 
         }.start()
@@ -106,7 +127,7 @@ class MainActivity : AppCompatActivity() {
                                 },
                                 onLongClick = { position ->
                                     recyclerManager.remove(position, true, false)
-                                }), true, true)
+                                }), animated = true, scroll = true)
                 isLoading = false
             }
         }.start()
