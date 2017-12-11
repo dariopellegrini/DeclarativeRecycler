@@ -63,16 +63,18 @@ recyclerManager.push(BasicRow(
 ```
 
 Each row needs at least a layout resource id. Configuration onClick and onLongClick closures are optional.
-In order to add rows to recycler manager the following methods are available:
+In order to add rows to recycler manager the following methods are available both for a row and list of rows:
 - push;
 - append;
 - add at position.
 
-In order to remove rows to recycler manager the following methods are available:
+In order to remove rows to recycler manager the following methods are available both for a row and list of rows:
 - pop;
 - removeLast;
 - remove Row;
 - remove at position;
+- remove with closure;
+- remove rows;
 - clear.
 
 After any modification to the rows list it is necessary to call
@@ -161,7 +163,6 @@ class ResponseRow(val message: String, onClick: () -> Unit, onLongClick: (Int) -
 
 ## TODO
 
-- Group modifications.
 - Tests.
 
 ## Author
