@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.layout_card_cell_right.view.*
 import java.util.*
 
 // UserRow implements Row interface and must conform to it.
-class UserRow(val message: String, val clicked: () -> Unit, val longClicked: (Int) -> Unit): Row {
+class UserRow(val message: String, val clicked: () -> Unit): Row {
 
     // Mandatory
     override val layoutID: Int
@@ -38,7 +38,6 @@ class UserRow(val message: String, val clicked: () -> Unit, val longClicked: (In
             itemView, position ->
             selected = !selected
             configuration?.invoke(itemView, position)
-//            longClicked(position)
         }
 
     var selected: Boolean = false

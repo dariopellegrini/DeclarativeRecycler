@@ -44,9 +44,6 @@ class MainActivity : AppCompatActivity() {
                                 message = message,
                                 clicked = {
                                     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-                                },
-                                longClicked = { position ->
-                                    recyclerManager.remove(position, true, false)
                                 }))
                         , true, true)
 
