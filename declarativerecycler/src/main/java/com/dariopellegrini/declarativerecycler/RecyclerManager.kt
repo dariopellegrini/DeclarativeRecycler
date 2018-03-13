@@ -1,7 +1,11 @@
 package com.dariopellegrini.declarativerecycler
 
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.text.method.TextKeyListener.clear
+
+
 
 class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) {
     val rows = mutableListOf<Row>()
@@ -91,18 +95,17 @@ class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerVie
 
 
     // Remove list
-
     fun remove(closure: (Row) -> Boolean, animated: Boolean = false, scroll: Boolean = false) {
         if (animated) {
             var scrollPosition = -1
             rows.removeAll {
                 row ->
-                if (closure(row)) {
+                if (scroll && scrollPosition == -1) {
+                    scrollPosition = 0
+                    recyclerView.scrollToPosition(scrollPosition)
+                }
+                if (closure(row) && rows.indexOf(row) >= 0) {
                     adapter.notifyItemRemoved(rows.indexOf(row))
-                    if (scroll && scrollPosition == -1) {
-                        scrollPosition = 0
-                        recyclerView.scrollToPosition(scrollPosition)
-                    }
                 }
                 closure(row)
             }
@@ -160,6 +163,14 @@ class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerVie
     // Reload
     fun reload() {
         adapter.notifyDataSetChanged()
+    }
+
+    fun diffReload(newRows: List<Row>) {
+        val diffResult = DiffUtil.calculateDiff(RecyclerDiffCallback(rows, newRows))
+        diffResult.dispatchUpdatesTo(adapter)
+
+        rows.clear()
+        rows.addAll(newRows)
     }
 
     // Properties

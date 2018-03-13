@@ -9,7 +9,9 @@ import kotlinx.android.synthetic.main.layout_card_cell_right.view.*
 import java.util.*
 
 // UserRow implements Row interface and must conform to it.
-class UserRow(val message: String, val clicked: () -> Unit): Row {
+class UserRow(val message: String, val clicked: () -> Boolean, val longClicked: () -> Unit): Row {
+
+    var view: View? = null
 
     // Mandatory
     override val layoutID: Int
@@ -19,17 +21,20 @@ class UserRow(val message: String, val clicked: () -> Unit): Row {
     override val configuration: ((View, Int) -> Unit)?
         get() = {
             itemView, _ ->
+            view = itemView
             itemView.rightMessageTextView.text = message
             itemView.rightDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
-
             itemView.setBackgroundColor( if (selected) Color.parseColor("#FF4081") else Color.TRANSPARENT)
         }
 
     // Optional
     override val onClick: ((View, Int) -> Unit)?
         get() = {
-            _, _ ->
-            clicked()
+            itemView, position ->
+            if (clicked()) {
+                selected = !selected
+                configuration?.invoke(itemView, position)
+            }
         }
 
     // Optional
@@ -37,8 +42,17 @@ class UserRow(val message: String, val clicked: () -> Unit): Row {
         get() = {
             itemView, position ->
             selected = !selected
-            configuration?.invoke(itemView, position)
+//            configuration?.invoke(itemView, position)
+
+            longClicked()
         }
 
     var selected: Boolean = false
+        get
+        set(value) {
+            view?.setBackgroundColor( if (value) Color.parseColor("#FF4081") else Color.TRANSPARENT)
+            field = value
+        }
+
+
 }

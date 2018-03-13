@@ -21,6 +21,7 @@ import android.view.MenuItem
 class MainActivity : AppCompatActivity() {
 
     var isLoading = false
+    var isEditing = false
 
     lateinit var recyclerManager: RecyclerManager
 
@@ -43,7 +44,14 @@ class MainActivity : AppCompatActivity() {
                         listOf(UserRow(
                                 message = message,
                                 clicked = {
-                                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                                    if (isEditing == false) {
+                                        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                                    }
+                                    isEditing
+                                },
+                                longClicked = {
+                                    isEditing = true
+                                    invalidateOptionsMenu()
                                 }))
                         , true, true)
 
@@ -58,7 +66,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_delete, menu)
-        return true
+        return isEditing
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -67,6 +75,17 @@ class MainActivity : AppCompatActivity() {
                 row ->
                 (row is UserRow) && (row.selected)
             }, true, false)
+        }
+        if (item?.itemId == R.id.action_close) {
+            isEditing = false
+            recyclerManager.rows.forEach {
+                row ->
+                if (row is UserRow) {
+                    row.selected = false
+                }
+            }
+            recyclerManager.reload()
+            invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -108,7 +127,7 @@ class MainActivity : AppCompatActivity() {
         isLoading = true
 
         Thread {
-            Thread.sleep(3000)
+            Thread.sleep(1000)
             runOnUiThread {
                 val speech = "Random response nr. ${(Math.random() * 100).toInt()}"
 

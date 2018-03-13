@@ -5,4 +5,9 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         android:icon="@mipmap/ic_delete" />
+    <item android:id="@+id/action_close"
+        android:title="Close"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_close" />
 </menu>
