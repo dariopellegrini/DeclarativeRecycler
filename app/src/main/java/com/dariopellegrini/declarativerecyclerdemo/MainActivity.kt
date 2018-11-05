@@ -19,7 +19,7 @@ import com.dariopellegrini.declarativerecyclerdemo.rows.*
 class MainActivity : AppCompatActivity() {
 
     var isLoading = false
-    var isEditing = true
+    var isEditing = false
 
     lateinit var recyclerManager: RecyclerManager
 
@@ -32,14 +32,7 @@ class MainActivity : AppCompatActivity() {
         layoutManager.reverseLayout = true
         recyclerManager = RecyclerManager(recyclerView, layoutManager)
 
-        recyclerManager.push(
-                ButtonRow("1"), true, true)
-        recyclerManager.push(
-                ButtonRow("1"), true, true)
-        recyclerManager.push(
-                ActionRow("1"), true, true)
-
-        sendButton.setOnClickListener(View.OnClickListener {
+        sendButton.setOnClickListener {
             val message = messageEditText.text.toString().trim()
             if (message.length > 0 && isLoading == false) {
                 messageEditText.text = null
@@ -62,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
                 randomResponse()
             }
-        })
+        }
 
         // Add welcome message
         addWelcomeMessage()
@@ -85,15 +78,15 @@ class MainActivity : AppCompatActivity() {
             recyclerManager.remove({ row ->
                 row is ButtonRow
             }, true, true)
-//            isEditing = false
-//            recyclerManager.rows.forEach {
-//                row ->
-//                if (row is UserRow) {
-//                    row.selected = false
-//                }
-//            }
-//            recyclerManager.reload()
-//            invalidateOptionsMenu()
+            isEditing = false
+            recyclerManager.rows.forEach {
+                row ->
+                if (row is UserRow) {
+                    row.selected = false
+                }
+            }
+            recyclerManager.reload()
+            invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)
     }
