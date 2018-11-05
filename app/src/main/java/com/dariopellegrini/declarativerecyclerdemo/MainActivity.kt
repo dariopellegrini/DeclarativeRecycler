@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         // Add welcome message
-//        addWelcomeMessage()
+        addWelcomeMessage()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
