@@ -9,19 +9,17 @@ import android.view.View
 import android.widget.Toast
 import com.dariopellegrini.declarativerecycler.BasicRow
 import com.dariopellegrini.declarativerecycler.RecyclerManager
-import com.dariopellegrini.declarativerecyclerdemo.rows.ProgressRow
-import com.dariopellegrini.declarativerecyclerdemo.rows.ResponseRow
-import com.dariopellegrini.declarativerecyclerdemo.rows.UserRow
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_card_cell_left.view.*
 import java.util.*
 import android.view.MenuItem
+import com.dariopellegrini.declarativerecyclerdemo.rows.*
 
 
 class MainActivity : AppCompatActivity() {
 
     var isLoading = false
-    var isEditing = false
+    var isEditing = true
 
     lateinit var recyclerManager: RecyclerManager
 
@@ -33,6 +31,13 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
         recyclerManager = RecyclerManager(recyclerView, layoutManager)
+
+        recyclerManager.push(
+                ButtonRow("1"), true, true)
+        recyclerManager.push(
+                ButtonRow("1"), true, true)
+        recyclerManager.push(
+                ActionRow("1"), true, true)
 
         sendButton.setOnClickListener(View.OnClickListener {
             val message = messageEditText.text.toString().trim()
@@ -60,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         // Add welcome message
-        addWelcomeMessage()
+//        addWelcomeMessage()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -77,15 +82,18 @@ class MainActivity : AppCompatActivity() {
             }, true, false)
         }
         if (item?.itemId == R.id.action_close) {
-            isEditing = false
-            recyclerManager.rows.forEach {
-                row ->
-                if (row is UserRow) {
-                    row.selected = false
-                }
-            }
-            recyclerManager.reload()
-            invalidateOptionsMenu()
+            recyclerManager.remove({ row ->
+                row is ButtonRow
+            }, true, true)
+//            isEditing = false
+//            recyclerManager.rows.forEach {
+//                row ->
+//                if (row is UserRow) {
+//                    row.selected = false
+//                }
+//            }
+//            recyclerManager.reload()
+//            invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)
     }

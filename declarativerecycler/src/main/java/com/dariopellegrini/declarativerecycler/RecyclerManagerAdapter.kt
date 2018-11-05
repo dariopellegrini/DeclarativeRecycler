@@ -34,7 +34,9 @@ class RecyclerManagerAdapter(var rows: List<Row>): RecyclerView.Adapter<Recycler
         }
 
         override fun onClick(v: View) {
-            adapter.rows[adapterPosition].onClick?.invoke(itemView, adapterPosition)
+            if (adapterPosition > 0 && adapterPosition < adapter.rows.size) {
+                adapter.rows[adapterPosition].onClick?.invoke(itemView, adapterPosition)
+            }
         }
 
         override fun onLongClick(v: View): Boolean {
