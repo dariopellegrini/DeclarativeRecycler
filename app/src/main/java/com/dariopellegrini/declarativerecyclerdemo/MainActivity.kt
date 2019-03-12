@@ -13,7 +13,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_card_cell_left.view.*
 import java.util.*
 import android.view.MenuItem
+import com.dariopellegrini.declarativerecycler.buildRow
 import com.dariopellegrini.declarativerecyclerdemo.rows.*
+import kotlinx.android.synthetic.main.layout_card_cell_right.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -99,22 +101,18 @@ class MainActivity : AppCompatActivity() {
                 val message = "Write whatever you want. I'll write whatever I want."
                 // Adding a basic row
                 recyclerManager.push(
-                        BasicRow(
-                                layoutID = R.layout.layout_card_cell_left,
-                                configuration = {
-                                    itemView, position ->
-                                    itemView.leftMessageTextView.text = message
-                                    itemView.leftDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
-                                },
-                                onClick = {
-                                    itemView, position ->
-                                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-                                },
-                                onLongClick = {
-                                    itemView, position ->
-                                    recyclerManager.remove(position, true, false)
-                                }
-                        ), animated = true, scroll = true)
+                        buildRow(R.layout.layout_card_cell_left) {
+                            configuration = { itemView, position ->
+                                itemView.leftMessageTextView.text = message
+                                itemView.leftDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
+                            }
+                            onClick = { itemView, position ->
+                                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+                            }
+                            onLongClick = { itemView, position ->
+                                recyclerManager.remove(position, true, false)
+                            }
+                        }, animated = true, scroll = true)
             }
 
         }.start()
