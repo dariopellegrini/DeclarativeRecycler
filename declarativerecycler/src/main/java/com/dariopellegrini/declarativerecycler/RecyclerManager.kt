@@ -7,13 +7,14 @@ import android.text.method.TextKeyListener.clear
 
 
 
-class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) {
-    val rows = mutableListOf<Row>()
+open class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) {
+    open val rows = mutableListOf<Row>()
     private val adapter: RecyclerManagerAdapter
 
     init {
         adapter = RecyclerManagerAdapter(rows)
         recyclerView.layoutManager = layoutManager
+        Log.i("RecyclerAdapter", "Adapter assigned")
         recyclerView.adapter = adapter
     }
 
@@ -163,14 +164,6 @@ class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerVie
     // Reload
     fun reload() {
         adapter.notifyDataSetChanged()
-    }
-
-    fun diffReload(newRows: List<Row>) {
-        val diffResult = DiffUtil.calculateDiff(RecyclerDiffCallback(rows, newRows))
-        diffResult.dispatchUpdatesTo(adapter)
-
-        rows.clear()
-        rows.addAll(newRows)
     }
 
     // Properties

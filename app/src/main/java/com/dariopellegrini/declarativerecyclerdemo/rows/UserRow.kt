@@ -11,7 +11,7 @@ import java.util.*
 // UserRow implements Row interface and must conform to it.
 class UserRow(val message: String, val clicked: () -> Boolean, val longClicked: () -> Unit): Row {
 
-    var view: View? = null
+    var itemView: View? = null
 
     // Mandatory
     override val layoutID: Int
@@ -21,7 +21,7 @@ class UserRow(val message: String, val clicked: () -> Boolean, val longClicked: 
     override val configuration: ((View, Int) -> Unit)?
         get() = {
             itemView, _ ->
-            view = itemView
+            this.itemView = itemView
             itemView.rightMessageTextView.text = message
             itemView.rightDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
             itemView.setBackgroundColor( if (selected) Color.parseColor("#FF4081") else Color.TRANSPARENT)

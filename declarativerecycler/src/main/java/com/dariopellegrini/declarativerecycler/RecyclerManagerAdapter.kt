@@ -1,6 +1,7 @@
 package com.dariopellegrini.declarativerecycler
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,13 @@ import android.view.ViewGroup
 class RecyclerManagerAdapter(var rows: List<Row>): RecyclerView.Adapter<RecyclerManagerAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
-        return Holder(view, this)
+        return if (viewType < 0) {
+            val view = rows[(viewType + 1) * -1].view!!
+            Holder(view, this)
+        } else {
+            val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+            Holder(view, this)
+        }
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
@@ -19,7 +25,11 @@ class RecyclerManagerAdapter(var rows: List<Row>): RecyclerView.Adapter<Recycler
     }
 
     override fun getItemViewType(position: Int): Int {
-        return rows[position].layoutID
+        return if (rows[position].view != null) {
+            -1 - position
+        } else {
+            rows[position].layoutID
+        }
     }
 
     override fun getItemCount(): Int {
@@ -29,8 +39,8 @@ class RecyclerManagerAdapter(var rows: List<Row>): RecyclerView.Adapter<Recycler
     class Holder(itemView: View, val adapter: RecyclerManagerAdapter): RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
 
         init {
-            this.itemView.setOnClickListener(this)
-            this.itemView.setOnLongClickListener(this)
+//            this.itemView.setOnClickListener(this)
+//            this.itemView.setOnLongClickListener(this)
         }
 
         override fun onClick(v: View) {

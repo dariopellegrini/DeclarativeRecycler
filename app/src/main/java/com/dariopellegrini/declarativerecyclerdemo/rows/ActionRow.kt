@@ -11,7 +11,7 @@ import java.util.*
 // UserRow implements Row interface and must conform to it.
 class ActionRow(val message: String): Row {
 
-    var view: View? = null
+    var itemView: View? = null
 
     // Mandatory
     override val layoutID: Int
@@ -21,7 +21,7 @@ class ActionRow(val message: String): Row {
     override val configuration: ((View, Int) -> Unit)?
         get() = {
             itemView, _ ->
-            view = itemView
+            this.itemView = itemView
             itemView.rightMessageTextView.text = message
             itemView.rightDateTextView.text = "${DateFormat.format("HH:mm:ss", Date())}"
         }

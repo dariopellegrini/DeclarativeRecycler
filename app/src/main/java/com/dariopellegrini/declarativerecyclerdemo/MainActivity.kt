@@ -5,62 +5,48 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.format.DateFormat
 import android.view.Menu
-import android.view.View
 import android.widget.Toast
-import com.dariopellegrini.declarativerecycler.BasicRow
-import com.dariopellegrini.declarativerecycler.RecyclerManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_card_cell_left.view.*
 import java.util.*
 import android.view.MenuItem
-import com.dariopellegrini.declarativerecycler.buildRow
+import com.dariopellegrini.declarativerecycler.*
 import com.dariopellegrini.declarativerecyclerdemo.rows.*
-import kotlinx.android.synthetic.main.layout_card_cell_right.view.*
-
 
 class MainActivity : AppCompatActivity() {
 
     var isLoading = false
     var isEditing = false
 
-    lateinit var recyclerManager: RecyclerManager
+    val recyclerManager: RecyclerManager by lazy {
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.reverseLayout = true
+        RecyclerManager(recyclerView, layoutManager)
+    }
+
+    val diffRecyclerManager: DiffRecyclerManager<DiffRow> by lazy {
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.reverseLayout = true
+        DiffRecyclerManager<DiffRow>(recyclerView, layoutManager)
+    }
+
+    val rows = mutableListOf<Row>()
+    val messagesRows = mutableListOf<MessageRow>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
-        val layoutManager = LinearLayoutManager(this)
-        layoutManager.reverseLayout = true
-        recyclerManager = RecyclerManager(recyclerView, layoutManager)
-
         sendButton.setOnClickListener {
-            val message = messageEditText.text.toString().trim()
-            if (message.length > 0 && isLoading == false) {
-                messageEditText.text = null
-
-                // Pushing a row with a right aligned message (for user message).
-                recyclerManager.push(
-                        listOf(UserRow(
-                                message = message,
-                                clicked = {
-                                    if (isEditing == false) {
-                                        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-                                    }
-                                    isEditing
-                                },
-                                longClicked = {
-                                    isEditing = true
-                                    invalidateOptionsMenu()
-                                }))
-                        , true, true)
-
-                randomResponse()
-            }
+            sendMessage()
+//            sendUserMessage()
         }
 
         // Add welcome message
-        addWelcomeMessage()
+//        addWelcomeMessage()
+
+        sendMessage()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -91,6 +77,46 @@ class MainActivity : AppCompatActivity() {
             invalidateOptionsMenu()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun sendUserMessage() {
+        val message = messageEditText.text.toString().trim()
+        if (message.length > 0 && isLoading == false) {
+            messageEditText.text = null
+
+            rows.addAll(
+                    listOf(UserRow(
+                            message = message,
+                            clicked = {
+                                if (isEditing == false) {
+                                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                                }
+                                isEditing
+                            },
+                            longClicked = {
+                                isEditing = true
+                                invalidateOptionsMenu()
+                            }))
+            )
+
+            // Pushing a row with a right aligned message (for user message).
+            recyclerManager.push(
+                    listOf(UserRow(
+                            message = message,
+                            clicked = {
+                                if (isEditing == false) {
+                                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                                }
+                                isEditing
+                            },
+                            longClicked = {
+                                isEditing = true
+                                invalidateOptionsMenu()
+                            }))
+                    , true, true)
+
+            randomResponse()
+        }
     }
 
     fun addWelcomeMessage() {
@@ -147,4 +173,18 @@ class MainActivity : AppCompatActivity() {
             }
         }.start()
     }
+
+    fun sendMessage() {
+        val value = (Math.random() * 100).toInt()
+        val row = if (value % 2 == 0) RightRow("$value") {
+            diffRecyclerManager.remove(it)
+        } else LeftRow("$value") {
+            diffRecyclerManager.remove(it)
+        }
+        diffRecyclerManager.push(row, true)
+    }
+}
+
+data class Mission(val name: String, val completed: Boolean) {
+    val id = UUID.randomUUID().toString()
 }
