@@ -23,7 +23,7 @@ Then add as dependency to your app/build.gradle
 ``` groovy
 dependencies {
     ...
-    compile 'com.github.dariopellegrini:DeclarativeRecycler:v0.5'
+    implementation 'com.github.dariopellegrini:DeclarativeRecycler:v0.6.2'
 }
 ```
 
