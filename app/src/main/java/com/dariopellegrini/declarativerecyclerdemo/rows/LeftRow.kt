@@ -1,6 +1,5 @@
 package com.dariopellegrini.declarativerecyclerdemo.rows
 
-import android.graphics.Color
 import android.text.format.DateFormat
 import android.view.View
 import com.dariopellegrini.declarativerecycler.DiffRow

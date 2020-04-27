@@ -1,9 +1,9 @@
 package com.dariopellegrini.declarativerecycler
 
 import android.content.Context
-import android.support.design.widget.CoordinatorLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -53,15 +53,15 @@ fun rowFromView(view: View): Row {
     }
 }
 
-fun RecyclerView.build(layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this.context),
-                       closure: DeclarativeBuilder.() -> Unit): RecyclerManager {
+fun androidx.recyclerview.widget.RecyclerView.build(layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager = androidx.recyclerview.widget.LinearLayoutManager(this.context),
+                                                    closure: DeclarativeBuilder.() -> Unit): RecyclerManager {
     val declarativeBuilder = DeclarativeBuilder(this, layoutManager)
     declarativeBuilder.closure()
     return declarativeBuilder.recyclerManager
 }
 
-class DeclarativeBuilder(recyclerView: RecyclerView,
-                         layoutManager: RecyclerView.LayoutManager): ViewAdding {
+class DeclarativeBuilder(recyclerView: androidx.recyclerview.widget.RecyclerView,
+                         layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager): ViewAdding {
     override val context = recyclerView.context
     val recyclerManager = RecyclerManager(recyclerView, layoutManager)
 
@@ -170,9 +170,9 @@ fun ViewAdding.horizontalScrollView(closure: ViewGroupBuilder.() -> Unit): Frame
     return scrollView
 }
 
-fun ViewAdding.recyclerView(layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context),
-                            closure: DeclarativeBuilder.() -> Unit): RecyclerView {
-    val recyclerView = RecyclerView(context)
+fun ViewAdding.recyclerView(layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager = androidx.recyclerview.widget.LinearLayoutManager(context),
+                            closure: DeclarativeBuilder.() -> Unit): androidx.recyclerview.widget.RecyclerView {
+    val recyclerView = androidx.recyclerview.widget.RecyclerView(context)
     recyclerView.build(layoutManager, closure)
     this.appendView(recyclerView)
     return recyclerView
@@ -196,7 +196,7 @@ fun <T: View> T.margin(left: Int? = null, top: Int? = null, right: Int? = null, 
                 top ?: params.topMargin,
                 right ?: params.rightMargin,
                 bottom ?: params.bottomMargin)
-        is CoordinatorLayout.LayoutParams -> params.setMargins(
+        is androidx.coordinatorlayout.widget.CoordinatorLayout.LayoutParams -> params.setMargins(
                 left ?: params.leftMargin,
                 top ?: params.topMargin,
                 right ?: params.rightMargin,

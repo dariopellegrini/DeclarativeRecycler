@@ -1,10 +1,9 @@
 package com.dariopellegrini.declarativerecycler
 
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
 import android.util.Log
 
-class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) where T : Row, T : Differetiable<T> {
+class DiffRecyclerManager<T>(val recyclerView: androidx.recyclerview.widget.RecyclerView, layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager) where T : Row, T : Differentiable<T> {
     val rows = mutableListOf<T>()
     private val adapter: RecyclerManagerAdapter
 

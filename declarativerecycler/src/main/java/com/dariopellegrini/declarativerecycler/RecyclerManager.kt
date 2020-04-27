@@ -1,13 +1,13 @@
 package com.dariopellegrini.declarativerecycler
 
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.text.method.TextKeyListener.clear
 
 
 
-open class RecyclerManager(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) {
+open class RecyclerManager(val recyclerView: androidx.recyclerview.widget.RecyclerView, layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager) {
     open val rows = mutableListOf<Row>()
     private val adapter: RecyclerManagerAdapter
 

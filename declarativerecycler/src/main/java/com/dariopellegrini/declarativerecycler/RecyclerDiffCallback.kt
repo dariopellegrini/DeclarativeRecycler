@@ -1,8 +1,8 @@
 package com.dariopellegrini.declarativerecycler
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 
-public class RecyclerDiffCallback<T: Differetiable<T>>(val oldRows: List<T>, val newRows: List<T>): DiffUtil.Callback() {
+public class RecyclerDiffCallback<T: Differentiable<T>>(val oldRows: List<T>, val newRows: List<T>): DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldRows[oldItemPosition].isTheSame(newRows[newItemPosition])
@@ -20,10 +20,4 @@ public class RecyclerDiffCallback<T: Differetiable<T>>(val oldRows: List<T>, val
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldRows[oldItemPosition].hasSameContent(newRows[newItemPosition])
     }
-}
-
-interface Differetiable<T> {
-
-    fun isTheSame(new: T): Boolean
-    fun hasSameContent(new: T): Boolean
 }

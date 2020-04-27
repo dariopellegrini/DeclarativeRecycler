@@ -1,13 +1,13 @@
 package com.dariopellegrini.declarativerecycler
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 
-class RecyclerManagerAdapter(var rows: List<Row>): RecyclerView.Adapter<RecyclerManagerAdapter.Holder>() {
+class RecyclerManagerAdapter(var rows: List<Row>): androidx.recyclerview.widget.RecyclerView.Adapter<RecyclerManagerAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return if (viewType < 0) {
@@ -36,7 +36,7 @@ class RecyclerManagerAdapter(var rows: List<Row>): RecyclerView.Adapter<Recycler
         return rows.size
     }
 
-    class Holder(itemView: View, val adapter: RecyclerManagerAdapter): RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
+    class Holder(itemView: View, val adapter: RecyclerManagerAdapter): androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnLongClickListener {
 
         init {
 //            this.itemView.setOnClickListener(this)

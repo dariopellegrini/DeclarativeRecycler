@@ -1,8 +1,7 @@
 package com.dariopellegrini.declarativerecyclerdemo
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.text.format.DateFormat
 import android.view.Menu
 import android.widget.Toast
@@ -10,7 +9,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_card_cell_left.view.*
 import java.util.*
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dariopellegrini.declarativerecycler.*
+import com.dariopellegrini.declarativerecycler.DiffRecyclerManager
+import com.dariopellegrini.declarativerecycler.DiffRow
 import com.dariopellegrini.declarativerecyclerdemo.rows.*
 
 class MainActivity : AppCompatActivity() {

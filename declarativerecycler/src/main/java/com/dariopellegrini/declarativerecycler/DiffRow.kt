@@ -1,6 +1,6 @@
 package com.dariopellegrini.declarativerecycler
 
-interface DiffRow: Row, Differetiable<DiffRow> {
+interface DiffRow: Row, Differentiable<DiffRow> {
     val id: Any
     val content: Any
 
