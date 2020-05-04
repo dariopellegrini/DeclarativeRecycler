@@ -1,12 +1,13 @@
 package com.dariopellegrini.declarativerecycler
 
-import androidx.recyclerview.widget.DiffUtil
 import android.util.Log
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+
 
 class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) where T : Row, T : Differentiable<T> {
     val rows = mutableListOf<T>()
-    var scrollEnabled = false
+    var shouldScroll = false
 
     private val adapter: RecyclerManagerAdapter
 
@@ -18,23 +19,23 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
     }
 
     // Add
-    fun add(row: T, position: Int, scroll: Boolean = scrollEnabled) {
+    fun add(row: T, position: Int, scroll: Boolean = shouldScroll) {
         reload(rows.toMutableList().apply { add(position, row) })
         if (scroll) {
             recyclerView.scrollToPosition(position)
         }
     }
 
-    fun push(row: T, scroll: Boolean = scrollEnabled) {
+    fun push(row: T, scroll: Boolean = shouldScroll) {
         add(row, 0, scroll)
     }
 
-    fun append(row: T, scroll: Boolean = scrollEnabled) {
+    fun append(row: T, scroll: Boolean = shouldScroll) {
         add(row, rowsSize, scroll)
     }
 
     // Add lists
-    fun add(rowsList: List<T>, position: Int, scroll: Boolean = scrollEnabled) {
+    fun add(rowsList: List<T>, position: Int, scroll: Boolean = shouldScroll) {
         reload(rows.toMutableList().apply {
             addAll(position, rowsList)
         })
@@ -43,16 +44,16 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
         }
     }
 
-    fun push(rowsList: List<T>, scroll: Boolean = scrollEnabled) {
+    fun push(rowsList: List<T>, scroll: Boolean = shouldScroll) {
         add(rowsList, 0, scroll)
     }
 
-    fun append(rowsList: List<T>, scroll: Boolean = scrollEnabled) {
+    fun append(rowsList: List<T>, scroll: Boolean = shouldScroll) {
         add(rowsList, rowsSize, scroll)
     }
 
     // Remove
-    fun remove(row: T, scroll: Boolean = scrollEnabled) {
+    fun remove(row: T, scroll: Boolean = shouldScroll) {
         val position = rows.indexOf(row)
         if (position > -1) {
             reload(rows.toMutableList().apply {
@@ -64,7 +65,7 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
         }
     }
 
-    fun remove(position: Int, scroll: Boolean = scrollEnabled) {
+    fun remove(position: Int, scroll: Boolean = shouldScroll) {
         if (rows.size > position) {
             reload(rows.toMutableList().apply {
                 removeAt(position)
@@ -75,11 +76,11 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
         }
     }
 
-    fun pop(scroll: Boolean = scrollEnabled) {
+    fun pop(scroll: Boolean = shouldScroll) {
         remove(0, scroll)
     }
 
-    fun removeLast(scroll: Boolean = scrollEnabled) {
+    fun removeLast(scroll: Boolean = shouldScroll) {
         if (lastPosition > -1) {
             remove(lastPosition, scroll)
         }
@@ -109,11 +110,17 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
     }
 
     // Reload
-    fun reload(newRows: List<T>) {
+    fun reload(newRows: List<T>, scroll: Boolean = shouldScroll) {
         val diffResult = DiffUtil.calculateDiff(RecyclerDiffCallback(rows, newRows))
         rows.clear()
         rows.addAll(newRows)
-        diffResult.dispatchUpdatesTo(adapter)
+        if (scroll) {
+            val recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
+            diffResult.dispatchUpdatesTo(adapter)
+            recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
+        } else {
+            diffResult.dispatchUpdatesTo(adapter)
+        }
     }
 
     // Properties
