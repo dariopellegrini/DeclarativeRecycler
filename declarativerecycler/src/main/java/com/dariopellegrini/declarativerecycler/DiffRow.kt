@@ -9,6 +9,6 @@ interface DiffRow: Row, Differentiable<DiffRow> {
     }
 
     override fun hasSameContent(new: DiffRow): Boolean {
-        return this.id == new.id
+        return this.content == new.content
     }
 }

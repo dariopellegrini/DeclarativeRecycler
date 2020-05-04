@@ -9,11 +9,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_card_cell_left.view.*
 import java.util.*
 import android.view.MenuItem
+import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dariopellegrini.declarativerecycler.*
 import com.dariopellegrini.declarativerecycler.DiffRecyclerManager
-import com.dariopellegrini.declarativerecycler.DiffRow
 import com.dariopellegrini.declarativerecyclerdemo.rows.*
+import kotlin.properties.Delegates
+import kotlin.properties.ObservableProperty
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,6 +36,10 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         layoutManager.reverseLayout = true
         DiffRecyclerManager<DiffRow>(recyclerView, layoutManager)
+    }
+
+    var list: List<DiffRow> by bind {
+        diffRecyclerManager
     }
 
     val rows = mutableListOf<Row>()
@@ -183,10 +193,14 @@ class MainActivity : AppCompatActivity() {
         } else LeftRow("$value") {
             diffRecyclerManager.remove(it)
         }
-        diffRecyclerManager.push(row, true)
+        list = list.toMutableList().apply {
+            add(0, row)
+        }
+//        diffRecyclerManager.push(row, true)
     }
 }
 
 data class Mission(val name: String, val completed: Boolean) {
     val id = UUID.randomUUID().toString()
 }
+

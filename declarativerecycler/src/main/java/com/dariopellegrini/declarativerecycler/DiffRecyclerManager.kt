@@ -2,9 +2,12 @@ package com.dariopellegrini.declarativerecycler
 
 import androidx.recyclerview.widget.DiffUtil
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
 
-class DiffRecyclerManager<T>(val recyclerView: androidx.recyclerview.widget.RecyclerView, layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager) where T : Row, T : Differentiable<T> {
+class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) where T : Row, T : Differentiable<T> {
     val rows = mutableListOf<T>()
+    var scrollEnabled = false
+
     private val adapter: RecyclerManagerAdapter
 
     init {
@@ -15,23 +18,23 @@ class DiffRecyclerManager<T>(val recyclerView: androidx.recyclerview.widget.Recy
     }
 
     // Add
-    fun add(row: T, position: Int, scroll: Boolean = false) {
+    fun add(row: T, position: Int, scroll: Boolean = scrollEnabled) {
         reload(rows.toMutableList().apply { add(position, row) })
         if (scroll) {
             recyclerView.scrollToPosition(position)
         }
     }
 
-    fun push(row: T, scroll: Boolean = false) {
+    fun push(row: T, scroll: Boolean = scrollEnabled) {
         add(row, 0, scroll)
     }
 
-    fun append(row: T, scroll: Boolean = false) {
+    fun append(row: T, scroll: Boolean = scrollEnabled) {
         add(row, rowsSize, scroll)
     }
 
     // Add lists
-    fun add(rowsList: List<T>, position: Int, animated: Boolean = false, scroll: Boolean = false) {
+    fun add(rowsList: List<T>, position: Int, scroll: Boolean = scrollEnabled) {
         reload(rows.toMutableList().apply {
             addAll(position, rowsList)
         })
@@ -40,16 +43,16 @@ class DiffRecyclerManager<T>(val recyclerView: androidx.recyclerview.widget.Recy
         }
     }
 
-    fun push(rowsList: List<T>, scroll: Boolean = false) {
+    fun push(rowsList: List<T>, scroll: Boolean = scrollEnabled) {
         add(rowsList, 0, scroll)
     }
 
-    fun append(rowsList: List<T>, scroll: Boolean = false) {
+    fun append(rowsList: List<T>, scroll: Boolean = scrollEnabled) {
         add(rowsList, rowsSize, scroll)
     }
 
     // Remove
-    fun remove(row: T, scroll: Boolean = false) {
+    fun remove(row: T, scroll: Boolean = scrollEnabled) {
         val position = rows.indexOf(row)
         if (position > -1) {
             reload(rows.toMutableList().apply {
@@ -61,7 +64,7 @@ class DiffRecyclerManager<T>(val recyclerView: androidx.recyclerview.widget.Recy
         }
     }
 
-    fun remove(position: Int, scroll: Boolean = false) {
+    fun remove(position: Int, scroll: Boolean = scrollEnabled) {
         if (rows.size > position) {
             reload(rows.toMutableList().apply {
                 removeAt(position)
@@ -72,11 +75,11 @@ class DiffRecyclerManager<T>(val recyclerView: androidx.recyclerview.widget.Recy
         }
     }
 
-    fun pop(scroll: Boolean = false) {
+    fun pop(scroll: Boolean = scrollEnabled) {
         remove(0, scroll)
     }
 
-    fun removeLast(scroll: Boolean = false) {
+    fun removeLast(scroll: Boolean = scrollEnabled) {
         if (lastPosition > -1) {
             remove(lastPosition, scroll)
         }
@@ -101,7 +104,7 @@ class DiffRecyclerManager<T>(val recyclerView: androidx.recyclerview.widget.Recy
     }
 
     // Clear
-    fun clear(animated: Boolean = false) {
+    fun clear() {
         reload(listOf())
     }
 
@@ -111,9 +114,6 @@ class DiffRecyclerManager<T>(val recyclerView: androidx.recyclerview.widget.Recy
         rows.clear()
         rows.addAll(newRows)
         diffResult.dispatchUpdatesTo(adapter)
-
-        rows.clear()
-        rows.addAll(newRows)
     }
 
     // Properties
