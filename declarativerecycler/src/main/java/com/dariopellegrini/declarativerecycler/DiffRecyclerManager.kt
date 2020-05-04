@@ -110,17 +110,11 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
     }
 
     // Reload
-    fun reload(newRows: List<T>, scroll: Boolean = shouldScroll) {
+    fun reload(newRows: List<T>) {
         val diffResult = DiffUtil.calculateDiff(RecyclerDiffCallback(rows, newRows))
         rows.clear()
         rows.addAll(newRows)
-        if (scroll) {
-            val recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
-            diffResult.dispatchUpdatesTo(adapter)
-            recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState);
-        } else {
-            diffResult.dispatchUpdatesTo(adapter)
-        }
+        diffResult.dispatchUpdatesTo(adapter)
     }
 
     // Properties

@@ -196,6 +196,7 @@ class MainActivity : AppCompatActivity() {
         list = list.toMutableList().apply {
             add(0, row)
         }
+        diffRecyclerManager.recyclerView.scrollToPosition(0)
 //        diffRecyclerManager.push(row, true)
     }
 }
