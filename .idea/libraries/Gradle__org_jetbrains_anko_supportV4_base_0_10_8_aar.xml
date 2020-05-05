@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: org.jetbrains.anko:supportV4-base:0.10.8@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-supportV4-base-0.10.8.aar/fa2ff6cb90455bd982f21e3205fdbc7f/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-supportV4-base-0.10.8.aar/fa2ff6cb90455bd982f21e3205fdbc7f/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4fc0f5d83f2048aec980e5a851650c36/jetified-supportV4-base-0.10.8/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4fc0f5d83f2048aec980e5a851650c36/jetified-supportV4-base-0.10.8/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
