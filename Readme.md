@@ -1,6 +1,6 @@
 # DeclarativeRecycler
 
-![](https://github.com/dariopellegrini/DeclarativeRecycler/raw/master/RecyclerManager.gif | width=100)
+![](https://github.com/dariopellegrini/DeclarativeRecycler/raw/master/RecyclerManager.gif)
 
 [![](https://jitpack.io/v/dariopellegrini/DeclarativeRecycler.svg)](https://jitpack.io/#dariopellegrini/DeclarativeRecycler)
 
