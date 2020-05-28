@@ -1,5 +1,7 @@
 # DeclarativeRecycler
 
+<img src="https://github.com/dariopellegrini/DeclarativeRecycler/raw/master/RecyclerManager.gif" width="300" />
+
 [![](https://jitpack.io/v/dariopellegrini/DeclarativeRecycler.svg)](https://jitpack.io/#dariopellegrini/DeclarativeRecycler)
 
 A declarative way to use recycler views.
@@ -160,6 +162,58 @@ class ResponseRow(val message: String, onClick: () -> Unit, onLongClick: (Int) -
                 }
         )
 ```
+
+## Differentiable
+
+Starting from version 0.8 `DiffRecycerManager` has been introduced. It uses `DiffUtils` to compute dynamic operations on list, giving better performances.
+
+First create a `Row` model which implements `Differentiable` interface. This interface needs for 2 functions that specify difference between 2 element of the list.
+```kotlin
+class MessageRow(val message: String, val click: (MessageRow) -> Unit): Row, Differentiable<MessageRow> {
+    override val layoutID = R.layout.layout_card_cell_left
+    
+    override val configuration: ((View, Int) -> Unit)? = { itemView, position ->
+        itemView.leftMessageTextView.text = message
+        itemView.leftDateTextView.text = "${android.text.format.DateFormat.format("HH:mm:ss", java.util.Date())}"
+
+        itemView.setOnClickListener {
+            click(this)
+        }
+    }
+    
+    // Function which check if the 2 elements are the same
+    override fun isTheSame(new: MessageRow): Boolean {
+        return message == new.message
+    }
+    
+    // Function which check if the 2 elements have the same content
+    override fun hasSameContent(new: MessageRow): Boolean {
+        return message == new.message
+    }
+
+}
+```
+
+Than create a `DiffRecyclerManager` and update the content using a new list.
+```kotlin
+val recyclerManager = DiffRecyclerManager<DiffRow>(recyclerView, LinearLayoutManager(this))
+...
+recyclerManager.reload(newList)
+```
+
+This will update `RecyclerView` content with animation, making a difference between old and new list with the rules specified in `Differentiable` interface functions.
+
+Apart from this, add, remove and clear methods are still supported.
+
+### Bind
+Usually `RecyclerView` are binded to a list that represents their content. From version 0.7 it's possible to bind a list to a `DiffRecyclerManager`.
+```kotlin
+var list: List<MessageRow> by bind {
+    recyclerManager
+    }
+```
+
+After that, every update to `list` variable will update the content of `DiffRecyclerManager`.
 
 ## TODO
 
