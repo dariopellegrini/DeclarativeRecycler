@@ -122,6 +122,10 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
         }
     }
 
+    fun reload(vararg newRows: T) {
+        reload(newRows.toList())
+    }
+
     // Properties
     val rowsSize: Int
         get() = rows.size
