@@ -165,7 +165,7 @@ class ResponseRow(val message: String, onClick: () -> Unit, onLongClick: (Int) -
 
 ## Differentiable
 
-Starting from version 0.8 `DiffRecycerManager` has been introduced. It uses `DiffUtils` to compute dynamic operations on list, giving better performances.
+Starting from version 0.7 `DiffRecycerManager` has been introduced. It uses `DiffUtils` to compute dynamic operations on list, giving better performances.
 
 First create a `Row` model which implements `Differentiable` interface. This interface needs for 2 functions that specify difference between 2 element of the list.
 ```kotlin
