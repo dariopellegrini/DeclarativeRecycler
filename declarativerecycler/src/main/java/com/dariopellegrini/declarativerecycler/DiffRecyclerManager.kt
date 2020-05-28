@@ -114,7 +114,12 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
         val diffResult = DiffUtil.calculateDiff(RecyclerDiffCallback(rows, newRows))
         rows.clear()
         rows.addAll(newRows)
-        diffResult.dispatchUpdatesTo(adapter)
+
+        try {
+            diffResult.dispatchUpdatesTo(adapter)
+        } catch (e: Exception) {
+            Log.e("DiffRecyclerManager", "$e")
+        }
     }
 
     // Properties
