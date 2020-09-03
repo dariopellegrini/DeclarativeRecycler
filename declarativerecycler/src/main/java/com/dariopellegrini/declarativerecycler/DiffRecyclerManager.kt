@@ -3,6 +3,8 @@ package com.dariopellegrini.declarativerecycler
 import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: RecyclerView.LayoutManager) where T : Row, T : Differentiable<T> {
@@ -112,6 +114,20 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
     // Reload
     fun reload(newRows: List<T>) {
         val diffResult = DiffUtil.calculateDiff(RecyclerDiffCallback(rows, newRows))
+        rows.clear()
+        rows.addAll(newRows)
+
+        try {
+            diffResult.dispatchUpdatesTo(adapter)
+        } catch (e: Exception) {
+            Log.e("DiffRecyclerManager", "$e")
+        }
+    }
+
+    suspend fun suspendReload(newRows: List<T>) {
+        val diffResult = withContext(Dispatchers.Default) {
+            DiffUtil.calculateDiff(RecyclerDiffCallback(rows, newRows))
+        }
         rows.clear()
         rows.addAll(newRows)
 
