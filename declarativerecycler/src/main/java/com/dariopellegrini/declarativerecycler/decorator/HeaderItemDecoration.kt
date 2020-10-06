@@ -71,8 +71,12 @@ class HeaderItemDecoration(
         val contactPoint = headerView.bottom + parent.paddingTop
         val childInContact = getChildInContact(parent, contactPoint) ?: return
 
-        if (isHeader(parent.getChildAdapterPosition(childInContact))) {
-            moveHeader(c, headerView, childInContact, parent.paddingTop)
+        try {
+            if (isHeader(parent.getChildAdapterPosition(childInContact))) {
+                moveHeader(c, headerView, childInContact, parent.paddingTop)
+                return
+            }
+        } catch (e: Exception) {
             return
         }
 
