@@ -3,6 +3,7 @@ package com.dariopellegrini.declarativerecycler
 import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.dariopellegrini.declarativerecycler.decorator.HeaderItemDecoration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -16,7 +17,6 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
     init {
         adapter = RecyclerManagerAdapter(rows)
         recyclerView.layoutManager = layoutManager
-        Log.i("RecyclerAdapter", "Adapter assigned")
         recyclerView.adapter = adapter
     }
 
@@ -148,4 +148,17 @@ class DiffRecyclerManager<T>(val recyclerView: RecyclerView, layoutManager: Recy
 
     val lastPosition: Int
         get() = rowsSize - 1
+
+    // Sticky Header
+    fun configureStickyHeaders() {
+        val decorator = HeaderItemDecoration(recyclerView) {
+            rows.size > it && (rows[it] as? StickyHeader)?.isStickyHeader == true
+        }
+        recyclerView.addItemDecoration(decorator)
+    }
+
+    // Decoration
+    fun addDecoration(itemDecoration: RecyclerView.ItemDecoration) {
+        recyclerView.addItemDecoration(itemDecoration)
+    }
 }

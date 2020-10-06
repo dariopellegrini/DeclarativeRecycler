@@ -39,7 +39,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     var list: List<DiffRow> by bind {
-        diffRecyclerManager
+        diffRecyclerManager.apply {
+            configureStickyHeaders()
+        }
     }
 
     val rows = mutableListOf<Row>()

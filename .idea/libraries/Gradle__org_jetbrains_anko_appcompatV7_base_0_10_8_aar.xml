@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: org.jetbrains.anko:appcompatV7-base:0.10.8@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/90e177f045fda21a1697dec7832e7b6c/jetified-appcompatV7-base-0.10.8/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/90e177f045fda21a1697dec7832e7b6c/jetified-appcompatV7-base-0.10.8/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/90e177f045fda21a1697dec7832e7b6c/jetified-appcompatV7-base-0.10.8/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1ca7dbe69c89a8fd2ffb21a2cfa2eacf/jetified-appcompatV7-base-0.10.8/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1ca7dbe69c89a8fd2ffb21a2cfa2eacf/jetified-appcompatV7-base-0.10.8/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/1ca7dbe69c89a8fd2ffb21a2cfa2eacf/jetified-appcompatV7-base-0.10.8/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

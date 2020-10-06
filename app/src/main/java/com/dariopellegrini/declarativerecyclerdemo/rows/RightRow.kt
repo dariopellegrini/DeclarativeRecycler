@@ -3,11 +3,12 @@ package com.dariopellegrini.declarativerecyclerdemo.rows
 import android.text.format.DateFormat
 import android.view.View
 import com.dariopellegrini.declarativerecycler.DiffRow
+import com.dariopellegrini.declarativerecycler.StickyHeader
 import com.dariopellegrini.declarativerecyclerdemo.R
 import kotlinx.android.synthetic.main.layout_card_cell_right.view.*
 import java.util.*
 
-class RightRow(val title: String, val click: (RightRow) -> Unit): DiffRow {
+class RightRow(val title: String, val click: (RightRow) -> Unit): DiffRow, StickyHeader {
     override val layoutID: Int
         get() = R.layout.layout_card_cell_right
 
@@ -24,4 +25,5 @@ class RightRow(val title: String, val click: (RightRow) -> Unit): DiffRow {
 
     override val id = title
     override val content = title
+    override val isStickyHeader = true
 }
