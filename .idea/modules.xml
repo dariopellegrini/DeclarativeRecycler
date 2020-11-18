@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DeclarativeRecycler.iml" filepath="$PROJECT_DIR$/DeclarativeRecycler.iml" group="DeclarativeRecycler" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="DeclarativeRecycler/app" />
-      <module fileurl="file://$PROJECT_DIR$/declarativerecycler/declarativerecycler.iml" filepath="$PROJECT_DIR$/declarativerecycler/declarativerecycler.iml" group="DeclarativeRecycler/declarativerecycler" />
+      <module fileurl="file://$PROJECT_DIR$/DeclarativeRecycler.iml" filepath="$PROJECT_DIR$/DeclarativeRecycler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DeclarativeRecycler.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DeclarativeRecycler.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/declarativerecycler/DeclarativeRecycler.declarativerecycler.iml" filepath="$PROJECT_DIR$/.idea/modules/declarativerecycler/DeclarativeRecycler.declarativerecycler.iml" />
     </modules>
   </component>
 </project>

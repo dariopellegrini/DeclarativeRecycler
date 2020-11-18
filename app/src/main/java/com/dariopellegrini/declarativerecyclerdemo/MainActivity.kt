@@ -15,7 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dariopellegrini.declarativerecycler.*
 import com.dariopellegrini.declarativerecycler.DiffRecyclerManager
+import com.dariopellegrini.declarativerecycler.flow.bind
 import com.dariopellegrini.declarativerecyclerdemo.rows.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 import kotlin.properties.ObservableProperty
 import kotlin.properties.ReadWriteProperty
@@ -60,7 +66,22 @@ class MainActivity : AppCompatActivity() {
         // Add welcome message
 //        addWelcomeMessage()
 
-        sendMessage()
+        CoroutineScope(Dispatchers.Main).launch {
+            listOf((0 until 10)
+                    .toList()
+                    .map { value ->
+                        if (value % 2 == 0) RightRow("$value") {
+                            diffRecyclerManager.remove(it)
+                        } else LeftRow("$value") {
+                            diffRecyclerManager.remove(it)
+                        }
+                    })
+                    .asFlow()
+                    .bind(diffRecyclerManager)
+                    .launchIn(this)
+        }
+
+        list = diffRecyclerManager.rows
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

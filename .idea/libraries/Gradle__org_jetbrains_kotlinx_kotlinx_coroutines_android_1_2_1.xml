@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1@jar">
+  <library name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-android/1.2.1/f4702ae3873525cf8bc270ac8bab985750d704b5/kotlinx-coroutines-android-1.2.1.jar!/" />
     </CLASSES>
